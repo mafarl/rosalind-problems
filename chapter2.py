@@ -205,6 +205,7 @@ def profile_most_probable_k_mer(text, k, matrix):
     return final_pattern
 
 
+# Has each nucleotide of a motif in a list rather than list with probabilities for each nucleotide
 def build_profile_matrix(motifs):
     """
         Finds the profile matrix for given list of motifs
@@ -213,7 +214,10 @@ def build_profile_matrix(motifs):
 
         Returns: the profile matrix for motifs (list)
     """
-    profile = {"A": [], "C": [], "G": [], "T": []}
+
+    # profile_matrix = [[] for _ in range(len(motifs[0]))]
+    profile_matrix = [[] for _ in range(4)]
+
     for i in range(len(motifs[0])):
 
         current_column = {"A": 0,
@@ -225,13 +229,13 @@ def build_profile_matrix(motifs):
             current_column[motif[i]] += 1
         counter = 0
         for key, value in current_column.items():
-            profile[key].append(value / 10)
+            profile_matrix[nucleotides.index(key)].append(value / 10)
             counter += 1
-    return profile
+    return profile_matrix
 
 
-# Can be done much faster/shorter
-def score(motifs):
+# Score function that doesn't work
+def score_wrong(motifs):
     score_to_return = 0
     scores = 0
 
@@ -250,6 +254,12 @@ def score(motifs):
     return scores
 
 
+def score(motifs):
+    columns = [''.join(seq) for seq in zip(*motifs)]
+    max_count = sum([max([c.count(nucleotide) for nucleotide in 'ACGT']) for c in columns])
+    return len(motifs[0])*len(motifs) - max_count
+
+
 # This one is the same
 def greedy_motif_search(dna, k, t):
     # Initialise best score as high as possible
@@ -262,6 +272,7 @@ def greedy_motif_search(dna, k, t):
 
     for i in range(len(dna[0]) - k + 1):
         # Array with current motifs for selected k-mer in dna[0]
+        # print(dna[0][i:(i + k)])
         motifs = [dna[0][i:(i + k)]]
 
         for j in range(1, t):
@@ -281,20 +292,7 @@ def greedy_motif_search(dna, k, t):
     return best_motifs
 
 
-"""print(greedy_motif_search(["GAGGCGCACATCATTATCGATAACGATTCGCCGCATTGCC", "TCATCGAATCCGATAACTGACACCTGCTCTGGCACCGCTC",
-                           "TCGGCGGTATAGCCAGAAAGCGTAGTGCCAATAATTTCCT", "GAGTCGTGGTGAAGTGTGGGTTATGGGGAAAGGCAGACTG",
-                           "GACGGCAACTACGGTTACAACGCAGCAACCGAAGAATATT", "TCTGTTGTTGCTAACACCGTTAAAGGCGGCGACGGCAACT",
-                           "AAGCGGCCAACGTAGGCGCGGCTTGGCATCTCGGTGTGTG", "AATTGAAAGGCGCATCTTACTCTTTTCGCTTTCAAAAAAA"], 5, 8))
-"""
-# print(profile_most_probable_k_mer("AGCAGCTTTGACTGCAACGGGCAATATGTCTCTGTGTGGATTAAAAAAAGAGTGTCTGATCTGAACTGGTTACCTGCCGTGAGTAAAT", 8, [[0.7, 0.2, 0.1, 0.5, 0.4, 0.3, 0.2, 0.1], [0.2, 0.2, 0.5, 0.4, 0.2, 0.3, 0.1, 0.6], [0.1, 0.3, 0.2, 0.1, 0.2, 0.1, 0.4, 0.2], [0.0, 0.3, 0.2, 0.0, 0.2, 0.3, 0.3, 0.1]]))
-
-
-def profile(motifs):
-    # Returns the profile of the dna list motifs.
-    columns = [''.join(seq) for seq in zip(*motifs)]
-    return [[float(col.count(nuc)) / float(len(col)) for nuc in 'ACGT'] for col in columns]
-
-
-print(profile(["GGCGTTCAGGCA"]))
-print(build_profile_matrix(["GGCGTTCAGGCA"]))
+print(greedy_motif_search(["TTACCTTAAC", "GATGTCTGTC",
+                           "ACGGCGTTAG", "CCCTAACGAG",
+                           "CGTCAGAGGT"], 4, 1))
 
