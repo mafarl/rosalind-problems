@@ -381,5 +381,4 @@ for i in range(len(this)):
 result = ""
 for letter in give:
     result += letter[0]
-    
 """

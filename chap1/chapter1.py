@@ -59,26 +59,31 @@ def number_to_pattern(index, k):
 def computing_frequencies(text, k):
     frequency_array = [0 for i in range(4 ** k)]
     for i in range(len(text) - k + 1):
-        pattern = text[i:(i + k)]
+        pattern = text[i:(i + k)].upper()
         j = pattern_to_number(pattern)
         frequency_array[j] += 1
+    print("finished")
     return frequency_array
 
 
-def faster_frequent_words(text, k, t):
+def faster_frequent_words(text, k):
+    print("here")
     frequent_patterns = []
     frequency_array = computing_frequencies(text, k)
-    # max_count = max(frequency_array)
+    max_count = max(frequency_array)
     for i in range(4 ** k):
-        """
+
         # Code for a pattern with the maximum count
-            if frequency_array[i] == max_count:
+        if frequency_array[i] == max_count:
+            pattern = number_to_pattern(i, k)
+            frequent_patterns.append(pattern)
+
+        """
+            if frequency_array[i] >= t:
             pattern = number_to_pattern(i, k)
             frequent_patterns.append(pattern)
         """
-        if frequency_array[i] >= t:
-            pattern = number_to_pattern(i, k)
-            frequent_patterns.append(pattern)
+
     return frequent_patterns
 
 
@@ -313,4 +318,4 @@ def frequent_words_with_mismatches_reverse_complements(text, k, d):
     return frequent_patterns
 
 
-print(frequent_words_with_mismatches_reverse_complements("ACGTTGCATGTCGCATGATGCATGAGAGCT", 4, 1))
+print(faster_frequent_words("atgaccgggatactgataaaaaaaagggggggggcgtacacattagataaacgtatgaagtacgttagactcggcgccgccgacccctattttttgagcagatttagtgacctggaaaaaaaatttgagtacaaaacttttccgaataaaaaaaaagggggggatgagtatccctgggatgacttaaaaaaaagggggggtgctctcccgatttttgaatatgtaggatcattcgccagggtccgagctgagaattggatgaaaaaaaagggggggtccacgcaatcgcgaaccaacgcggacccaaaggcaagaccgataaaggagatcccttttgcggtaatgtgccgggaggctggttacgtagggaagccctaacggacttaataaaaaaaagggggggcttataggtcaatcatgttcttgtgaatggatttaaaaaaaaggggggggaccgcttggcgcacccaaattcagtgtgggcgagcgcaacggttttggcccttgttagaggcccccgtaaaaaaaagggggggcaattatgagagagctaatctatcgcgtgcgtgttcataacttgagttaaaaaaaagggggggctggggcacatacaagaggagtcttccttatcagttaatgctgtatgacactatgtattggcccattggctaaaagcccaacttgacaaatggaagatagaatccttgcataaaaaaaagggggggaccgaaagggaagctggtgagcaacgacagattcttacgtgcattagctcgcttccggggatctaatagcacgaagcttaaaaaaaaggggggga", 15))
