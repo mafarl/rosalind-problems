@@ -1,4 +1,6 @@
-from chapter2 import nucleotides, profile_most_probable_k_mer, score
+from chapter2 import nucleotides
+from rosalind_2c_profile_most_probable_k_mer import profile_most_probable_k_mer
+from rosalind_2d_greedy_motif_search import score
 
 
 # Laplace’s Rule of Succession - substituting zero-probabilities with pseudocounts
@@ -54,3 +56,17 @@ def greedy_motif_search_with_pseudocounts(dna, k, t):
             best_motifs = motifs
 
     return best_motifs
+
+
+if __name__ == '__main__':
+    with open('../data/2e.txt') as input_data:
+        k, t = map(int, input_data.readline().split())
+        dna_list = [line.strip() for line in input_data.readlines()]
+
+    best_motifs = greedy_motif_search_with_pseudocounts(dna_list, k, t)
+
+    # Print and save the answer.
+    print('\n'.join(best_motifs))
+    with open('../output/Assignment_02E.txt', 'w') as output_data:
+        output_data.write('\n'.join(best_motifs))
+
