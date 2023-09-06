@@ -9,6 +9,10 @@ def random_number_generator(N):
 
 
 def randomised_motif_search(dna, k, t):
+    """ May change all t strings in Motifs in a single iteration.
+    This strategy may prove reckless, since some correct motifs (captured in Motifs)
+    may potentially be discarded at the next iteration """
+
     m = []
 
     for string in dna:
@@ -28,13 +32,13 @@ def randomised_motif_search(dna, k, t):
 if __name__ == '__main__':
     with open('../data/2f.txt') as input_data:
         k, t = map(int, input_data.readline().split())
-        dna_list = [line.strip() for line in input_data.readlines()]
+        dna_list = [line.strip().upper() for line in input_data.readlines()]
 
     # Initialize the best scoring motifs as a score higher than the highest possible score.
     best_motifs = [k * t, None]
 
     # Repeat the radomized motif search 1000 times.
-    for repeat in range(1000):
+    for repeat in range(100):
         current_motifs = randomised_motif_search(dna_list, k, t)
         if score(current_motifs) < best_motifs[0]:
             best_motifs[0] = score(current_motifs)

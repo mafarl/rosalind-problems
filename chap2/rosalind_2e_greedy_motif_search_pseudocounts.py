@@ -19,7 +19,7 @@ def laplaces_rule(motifs, number):
             current_column[motif[i]] += 1
         counter = 0
         for key, value in current_column.items():
-            profile_matrix[nucleotides.index(key)].append((value + 1) / (4 + number))
+            profile_matrix[nucleotides.index(key)].append((value + 1) / (4 + len(motifs)))
             counter += 1
     return profile_matrix
 
